@@ -5,6 +5,7 @@
     "version": "1.0",
     "action": {
         "default_title": "QuickTranslator",
+        "default_popup": "./views/popup.html",
         "default_icon": {
             "128":"./res/icons/128.png",
             "48":"./res/icons/48.png",
@@ -21,5 +22,6 @@
         "service_worker":"scripts/pageEvent.js",
         "type":"module",
         "persistant":false
-    }
+    },
+    "permissions": ["contextMenus"]
 }
