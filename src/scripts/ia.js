@@ -23,8 +23,13 @@ const generationConfig = {
 let chat = model.getGenerativeModel({model:'gemini-pro'});
 
 // Function to send a message and get the response
-export async function sendMessage(prompt) {
-    const result = await chat.generateContent(prompt).then(response => {
-        return(response.response.text())
-    })
+async function sendMessage(prompt) {
+    try {
+        const result = await chat.generateContent(prompt);
+        return result.response.text();
+    } catch (error) {
+        throw error;
+    }
 }
+
+module.exports = { sendMessage };

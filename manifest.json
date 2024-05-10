@@ -4,27 +4,21 @@
     "description": "Project made for alura ia immersion w/ Google",
     "version": "1.2",
     "icons": {
-        "128":"./res/icons/128.png",
-        "48":"./res/icons/48.png",
-        "16":"./res/icons/16.png"
+        "128":"./dist/res/icons/128.png",
+        "48":"./dist/res/icons/48.png",
+        "16":"./dist/res/icons/16.png"
     },
     "action": {
         "default_title": "QuickTranslator",
-        "default_popup": "./views/popup.html",
+        "default_popup": "./dist/views/popup.html",
         "default_icon": {
-            "128":"./res/icons/128.png",
-            "48":"./res/icons/48.png",
-            "16":"./res/icons/16.png"
+            "128":"./dist/res/icons/128.png",
+            "48":"./dist/res/icons/48.png",
+            "16":"./dist/res/icons/16.png"
         }
     },
-    "content_scripts":[
-        {
-            "matches":["<all_urls>"],
-            "js":["scripts/content.js"]
-        }
-    ],
     "background":{
-        "service_worker":"scripts/pageEvent.js",
+        "service_worker":"./dist/scripts/pageEvent.js",
         "type":"module",
         "persistant":false
     },

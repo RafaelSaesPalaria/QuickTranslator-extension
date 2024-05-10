@@ -1,0 +1,30 @@
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+
+/* Unsafe, temporary solution. this key will be removed */
+let GOOGLE_API_KEY = 'AIzaSyCxmgA-McbdiR1x9s-h6TgRL9Lnho6RKJU'
+const model = new GoogleGenerativeAI(GOOGLE_API_KEY);
+
+// Define safety settings
+const safetySettings = {
+    HARASSMENT: "BLOCK_MOST",
+    HATE: "BLOCK_MOST",
+    SEXUAL: "BLOCK_MOST",
+    DANGEROUS: "BLOCK_MOST"
+};
+
+// Define generation config
+const generationConfig = {
+    temperature: 1,
+    top_k: 40,
+    top_p: 0.95
+};
+
+// Start chat with an empty history
+let chat = model.getGenerativeModel({model:'gemini-pro'});
+
+// Function to send a message and get the response
+module.exports= async function sendMessage(prompt) {
+    const result = await chat.generateContent(prompt).then(response => {
+        return(response.response.text())
+    })
+}
