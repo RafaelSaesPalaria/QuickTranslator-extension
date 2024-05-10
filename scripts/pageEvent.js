@@ -1,3 +1,5 @@
+
+
 var contextMenuItem = {
     "id": "quickTranslator",
     "title": `Quick Translator`,
@@ -12,5 +14,4 @@ chrome.contextMenus.onClicked.addListener(function (clickData) {
     let text = clickData.selectionText
 
     let prompt = `Translate everything i say to ${language}:\n ${text}`
-    console.log(prompt)
 })
