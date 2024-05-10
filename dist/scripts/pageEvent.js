@@ -1,4 +1,40 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+
+/* Unsafe, temporary solution. this key will be removed */
+let GOOGLE_API_KEY = 'AIzaSyCxmgA-McbdiR1x9s-h6TgRL9Lnho6RKJU'
+const model = new GoogleGenerativeAI(GOOGLE_API_KEY);
+
+// Define safety settings
+const safetySettings = {
+    HARASSMENT: "BLOCK_MOST",
+    HATE: "BLOCK_MOST",
+    SEXUAL: "BLOCK_MOST",
+    DANGEROUS: "BLOCK_MOST"
+};
+
+// Define generation config
+const generationConfig = {
+    temperature: 1,
+    top_k: 40,
+    top_p: 0.95
+};
+
+// Start chat with an empty history
+let chat = model.getGenerativeModel({model:'gemini-pro'});
+
+// Function to send a message and get the response
+async function sendMessage(prompt) {
+    try {
+        const result = await chat.generateContent(prompt);
+        return result.response.text();
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = { sendMessage };
+},{"@google/generative-ai":2}],2:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1279,65 +1315,38 @@ exports.GoogleGenerativeAIResponseError = GoogleGenerativeAIResponseError;
 exports.POSSIBLE_ROLES = POSSIBLE_ROLES;
 
 
-},{}],2:[function(require,module,exports){
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+},{}],3:[function(require,module,exports){
+let { sendMessage } = require('../../dist/scripts/ia.js');
 
-/* Unsafe, temporary solution. this key will be removed */
-let GOOGLE_API_KEY = 'AIzaSyCxmgA-McbdiR1x9s-h6TgRL9Lnho6RKJU'
-const model = new GoogleGenerativeAI(GOOGLE_API_KEY);
-
-// Define safety settings
-const safetySettings = {
-    HARASSMENT: "BLOCK_MOST",
-    HATE: "BLOCK_MOST",
-    SEXUAL: "BLOCK_MOST",
-    DANGEROUS: "BLOCK_MOST"
-};
-
-// Define generation config
-const generationConfig = {
-    temperature: 1,
-    top_k: 40,
-    top_p: 0.95
-};
-
-// Start chat with an empty history
-let chat = model.getGenerativeModel({model:'gemini-pro'});
-
-// Function to send a message and get the response
-async function sendMessage(prompt) {
-    try {
-        const result = await chat.generateContent(prompt);
-        return result.response.text();
-    } catch (error) {
-        throw error;
-    }
-}
-
-module.exports = { sendMessage };
-},{"@google/generative-ai":1}],3:[function(require,module,exports){
-let { sendMessage } = require('./ia.js');
-
+let language = navigator.language || navigator.userLanguage
 var contextMenuItem = {
     "id": "quickTranslator",
-    "title": `Quick Translator`,
+    "title": `Quick Translator - ${language}`,
     "contexts": ["selection"]
 }
 chrome.contextMenus.removeAll(function() {
     chrome.contextMenus.create(contextMenuItem);
 });
 
+function sendAlert(message) {
+    chrome.tabs.query({active:true, currentWindow: true},function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id,message)
+    });
+}
+
 chrome.contextMenus.onClicked.addListener(function (clickData) {
-    let language = navigator.language || navigator.userLanguage
+    
     let text = clickData.selectionText
 
     let prompt = `Translate everything i say to ${language}:\n ${text}`
     sendMessage(prompt)
     .then(response => {
         console.log(response);
+        sendAlert(response)
     })
     .catch(error => {
         console.error(error);
+        sendAlert(error)
     });
 })
-},{"./ia.js":2}]},{},[3]);
+},{"../../dist/scripts/ia.js":1}]},{},[3]);

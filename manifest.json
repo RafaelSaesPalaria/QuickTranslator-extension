@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "QuickTranslator",
     "description": "Project made for alura ia immersion w/ Google",
-    "version": "1.2",
+    "version": "1.3",
     "icons": {
         "128":"./dist/res/icons/128.png",
         "48":"./dist/res/icons/48.png",
@@ -17,10 +17,16 @@
             "16":"./dist/res/icons/16.png"
         }
     },
+    "content_scripts":[
+        {
+            "matches":["<all_urls>"],
+            "js":["./dist/scripts/content.js"]
+        }
+    ],
     "background":{
         "service_worker":"./dist/scripts/pageEvent.js",
         "type":"module",
         "persistant":false
     },
-    "permissions": ["contextMenus"]
+    "permissions": ["activeTab","contextMenus"]
 }
