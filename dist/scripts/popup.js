@@ -2,7 +2,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 /* Unsafe, temporary solution. this key will be removed */
-let GOOGLE_API_KEY = 'a'
+let GOOGLE_API_KEY = 'AIzaSyArywaFwdXyR5qSIEpUwtu4BIcTxMjDA4g'
 const model = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
 // Define safety settings
@@ -1326,6 +1326,7 @@ let content = {
 content.submit.addEventListener("click",sendText)
 function sendText() {
     let prompt = content.textarea.value
+    console.log(prompt)
     sendMessage(prompt)
     .then(response => {
         console.log(response);
@@ -1341,5 +1342,11 @@ function sendAlert(message) {
     chrome.tabs.query({active:true, currentWindow: true},function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id,message)
     });
+}
+
+content.textarea.addEventListener("input",checkTextAreaSize)
+function checkTextAreaSize() {
+    console.log(content.textarea.value.split('\n').length+1)
+    content.textarea.rows = content.textarea.value.split('\n').length+1
 }
 },{"../../dist/scripts/ia.js":1}]},{},[3]);

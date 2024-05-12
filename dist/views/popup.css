@@ -16,6 +16,8 @@ h1 {
 }
 
 textarea#text {
+    font-size: 1.5em;
+    padding: 2px 2px 0.5em 2px;
     min-width: 164px;
 }
 

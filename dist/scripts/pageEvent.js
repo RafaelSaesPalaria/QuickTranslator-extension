@@ -2,7 +2,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 /* Unsafe, temporary solution. this key will be removed */
-let GOOGLE_API_KEY = 'AIzaSyCxmgA-McbdiR1x9s-h6TgRL9Lnho6RKJU'
+let GOOGLE_API_KEY = 'AIzaSyArywaFwdXyR5qSIEpUwtu4BIcTxMjDA4g'
 const model = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
 // Define safety settings
