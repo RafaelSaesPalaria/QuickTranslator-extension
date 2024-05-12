@@ -1346,7 +1346,14 @@ function sendAlert(message) {
 
 content.textarea.addEventListener("input",checkTextAreaSize)
 function checkTextAreaSize() {
-    console.log(content.textarea.value.split('\n').length+1)
-    content.textarea.rows = content.textarea.value.split('\n').length+1
+    let text = content.textarea.value
+    content.textarea.rows = text.split('\n').length+1
+
+    let m = 0
+    for (i of text.split('\n')) {
+        m = Math.max(i.length,m)
+    }
+    content.textarea.style.width = `${m/1.5}em`
+
 }
 },{"../../dist/scripts/ia.js":1}]},{},[3]);
