@@ -1,0 +1,27 @@
+@charset "UTF-8";
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    padding: 5px;
+    border: 2px solid white;
+    background-color: gray;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+textarea#text {
+    min-width: 164px;
+}
+
+input#submit {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 30px;
+}
