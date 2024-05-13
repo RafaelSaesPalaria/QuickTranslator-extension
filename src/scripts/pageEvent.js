@@ -7,22 +7,17 @@ let prompts = {
     summarize:`Summarize everything i say into topics and translate to ${language}:\n`
 }
 
-
-var contextMenuItem_translate = {
-    "id": "translate",
-    "title": `Translate to ${language}`,
-    "contexts": ["selection"]
+createMenuItem('translate')
+createMenuItem('summarize')
+function createMenuItem(action) {
+    action = `${action}`.toLowerCase()
+    var item = {
+        'id': action,
+        'title': `${action}`[0].toUpperCase() + `${action}`.slice(1),
+        'contexts':['selection']
+    }
+    chrome.contextMenus.create(item)
 }
-var contextMenuItem_summarize = {
-    "id": "summarize",
-    "title": `Summarize to ${language} `,
-    "contexts": ["selection"]
-}
-
-//chrome.contextMenus.removeAll(function() {
-    chrome.contextMenus.create(contextMenuItem_translate);
-    chrome.contextMenus.create(contextMenuItem_summarize);
-//});
 
 function sendAlert(message) {
     chrome.tabs.query({active:true, currentWindow: true},function (tabs) {
@@ -38,7 +33,6 @@ chrome.contextMenus.onClicked.addListener(function (clickData) {
 
     if (clickData.menuItemId in prompts) {
         let prompt = (prompts[clickData.menuItemId]+text)
-        console.log(prompts[clickData.menuItemId])
         sendMessage(prompt)
         .then(response => {
             console.log(response);
