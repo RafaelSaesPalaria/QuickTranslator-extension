@@ -2,7 +2,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 /* Unsafe, temporary solution. this key will be removed */
-let GOOGLE_API_KEY = 'AIzaSyArywaFwdXyR5qSIEpUwtu4BIcTxMjDA4g'
+let GOOGLE_API_KEY = 'AIzaSyC3RxG5T8HW3gpgwQe9oLejocgiWh1YB5A'
 const model = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
 // Define safety settings
@@ -1319,14 +1319,28 @@ exports.POSSIBLE_ROLES = POSSIBLE_ROLES;
 let { sendMessage } = require('../../dist/scripts/ia.js');
 
 let language = navigator.language || navigator.userLanguage
-var contextMenuItem = {
-    "id": "quickTranslator",
-    "title": `Quick Translator - ${language}`,
+
+let prompts = {
+    translate:`Translate everything i say to ${language}:\n`,
+    summarize:`Summarize everything i say into topics and translate to ${language}:\n`
+}
+
+
+var contextMenuItem_translate = {
+    "id": "translate",
+    "title": `Translate to ${language}`,
     "contexts": ["selection"]
 }
-chrome.contextMenus.removeAll(function() {
-    chrome.contextMenus.create(contextMenuItem);
-});
+var contextMenuItem_summarize = {
+    "id": "summarize",
+    "title": `Summarize to ${language} `,
+    "contexts": ["selection"]
+}
+
+//chrome.contextMenus.removeAll(function() {
+    chrome.contextMenus.create(contextMenuItem_translate);
+    chrome.contextMenus.create(contextMenuItem_summarize);
+//});
 
 function sendAlert(message) {
     chrome.tabs.query({active:true, currentWindow: true},function (tabs) {
@@ -1336,17 +1350,22 @@ function sendAlert(message) {
 
 chrome.contextMenus.onClicked.addListener(function (clickData) {
     
+    console.log(clickData)
+
     let text = clickData.selectionText
 
-    let prompt = `Translate everything i say to ${language}:\n ${text}`
-    sendMessage(prompt)
-    .then(response => {
-        console.log(response);
-        sendAlert(response)
-    })
-    .catch(error => {
-        console.error(error);
-        sendAlert(error)
-    });
+    if (clickData.menuItemId in prompts) {
+        let prompt = (prompts[clickData.menuItemId]+text)
+        console.log(prompts[clickData.menuItemId])
+        sendMessage(prompt)
+        .then(response => {
+            console.log(response);
+            sendAlert(response)
+        })
+        .catch(error => {
+            console.error(error);
+            sendAlert(error)
+        });
+    }
 })
 },{"../../dist/scripts/ia.js":1}]},{},[3]);
