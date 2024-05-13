@@ -9,16 +9,28 @@ let prompts = {
 
 createMenuItem('translate')
 createMenuItem('summarize')
+/**
+ * @Called at the start of the pageEvent
+ * @Do Configure and create a context menu item to execute the action
+ * @param {String} action the action to be executed [Has to be created in prompts]
+ */
 function createMenuItem(action) {
     action = `${action}`.toLowerCase()
-    var item = {
-        'id': action,
-        'title': `${action}`[0].toUpperCase() + `${action}`.slice(1),
-        'contexts':['selection']
+    if (action in prompts) {
+        var item = {
+            'id': action,
+            'title': `${action}`[0].toUpperCase() + `${action}`.slice(1),
+            'contexts':['selection']
+        }
+        chrome.contextMenus.create(item)
     }
-    chrome.contextMenus.create(item)
 }
 
+/**
+ * @Called When a message is received of the IA
+ * @Do Send the message to be alerted in the context.js
+ * @param {String} message 
+ */
 function sendAlert(message) {
     chrome.tabs.query({active:true, currentWindow: true},function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id,message)
@@ -26,9 +38,6 @@ function sendAlert(message) {
 }
 
 chrome.contextMenus.onClicked.addListener(function (clickData) {
-    
-    console.log(clickData)
-
     let text = clickData.selectionText
 
     if (clickData.menuItemId in prompts) {
